@@ -37,10 +37,13 @@ app.get("/", (req, res) => {
 });
 
 //5 index route
-app.get("/listings", wrapAsync(async (req, res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index", { allListings });
-}));
+app.get(
+  "/listings",
+  wrapAsync(async (req, res) => {
+    const allListings = await Listing.find({});
+    res.render("listings/index", { allListings });
+  })
+);
 
 //8 new route
 app.get("/listings/new", (req, res) => {
@@ -48,17 +51,19 @@ app.get("/listings/new", (req, res) => {
 });
 
 //7 show route
-app.get("/listings/:id", wrapAsync(async (req, res) => {
-  let { id } = req.params; //extract id
-  const listing = await Listing.findById(id); //find listing by id
-  res.render("listings/show.ejs", { listing });
-}));
+app.get(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params; //extract id
+    const listing = await Listing.findById(id); //find listing by id
+    res.render("listings/show.ejs", { listing });
+  })
+);
 
 //9 Create Route
 app.post(
   "/listings",
   wrapAsync(async (req, res, next) => {
-    //let {title, description, image, price, country, location} = req.body;
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
@@ -66,29 +71,37 @@ app.post(
 );
 
 //10 Edit route
-app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
-  let { id } = req.params; //extract id
-  const listing = await Listing.findById(id); //find listing by id
-  res.render("listings/edit.ejs", { listing });
-}));
+app.get(
+  "/listings/:id/edit",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params; //extract id
+    const listing = await Listing.findById(id); //find listing by id
+    res.render("listings/edit.ejs", { listing });
+  })
+);
 
 //11 update route
-app.put("/listings/:id", wrapAsync(async (req, res) => {
-  let { id } = req.params; //fetch id
-  const listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing }); // deconstruct = ...req.body.listing, and put in listing of id "id"
-  //console.log(listing);
-  //console.log(listing.image);
-
-  res.redirect(`/listings/${id}`);
-}));
+app.put(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params; //fetch id
+    const listing = await Listing.findByIdAndUpdate(id, {
+      ...req.body.listing,
+    });
+    res.redirect(`/listings/${id}`);
+  })
+);
 
 //12 delete route
-app.delete("/listings/:id", wrapAsync(async (req, res) => {
-  let { id } = req.params;
-  let deleteListing = await Listing.findByIdAndDelete(id);
-  console.log(deleteListing);
-  res.redirect("/listings");
-}));
+app.delete(
+  "/listings/:id",
+  wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    let deleteListing = await Listing.findByIdAndDelete(id);
+    console.log(deleteListing);
+    res.redirect("/listings");
+  })
+);
 
 //4 new route
 // app.get("/testListing", async (req, res) => {
@@ -106,18 +119,19 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
 //     res.send("Successful Testing");
 // });
 
-//13 error catch
-app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong!" } = err;
-  res.status(statusCode).send(message);
-});
-
-//14 error throwß
+// Catch-all route for 404 errors
 app.all("/:path", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
 
-//1
+// Error handling middleware
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message = "Something went wrong!" } = err;
+  res.status(statusCode).send(message);
+});
+
+//15 listen
 app.listen(8080, () => {
   console.log("server is listening to port 8080");
+  console.log("http://localhost:8080");
 });
