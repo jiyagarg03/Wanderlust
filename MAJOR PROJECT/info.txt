@@ -1,0 +1,46 @@
+Phase1 a
+
+1st) added dependencies, by cmds:
+npm init -y
+npm i nodejs
+npm i express, npm i moongoose, npm i ejs
+touch app.js(creates a file)
+nodemon app.js(to run)
+
+2nd) made app.js
+
+3rd) model: listing = title(string), description(string), image(string URL), price(number), location(string), country(string)
+a) listing.js
+b) added it in add.js
+
+4th) made init to intialise
+a)data.js = sample data(export it thru function)
+b) index.js = to run data.js
+
+now making index route: accept GET requests: /listings = all listings
+then we did show route, made show.ejs
+then add ruppes in price, and for comma
+
+function: num.toLocaleString("en-IN"); make num to string n add commas(en-IN = commas by Indian standard)
+
+now creat: New(GET request send and give back /listing/new to create a new form, now this is done, second request after submitting it will go to create route)
+ & create route(POST /listings)
+
+now update: Edit & update route
+GET  /listings/:id/edit = edit form
+PUT  /listings/:id   (after submit from GET) 
+
+now delete route: DELETE /listings/:id
+
+
+Phase 1 c 
+EJS mate
+
+made boilerplate and styls.css
+we did all the styling basically, and made script.js
+
+Phase 1c - middlewares, error handling, form validation
+
+error(try n catch)
+wrapAsync
+custom ExpressError
