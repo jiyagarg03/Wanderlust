@@ -8,6 +8,7 @@
       action="/listings/<%= listing._id %>?_method=PUT"
       novalidate
       class="needs-validation"
+      enctype="multipart/form-data"
     >
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -29,15 +30,17 @@
       </div>
 
       <div class="mb-3">
-        <label for="image" class="form-label">Image Link</label>
-        <input
-          name="listing[image]"
-          value="<%= listing.image %>"
-          type="text"
-          class="form-control"
-          required
+        Original Listing Image: <br />
+        <img
+          src="<%= originalImageUrl %>"
+          class="img-fluid rounded"
+          style="max-width: 300px"
         />
-        <div class="invalid-feedback">Image Link should not be emtpy</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload New Image</label>
+        <input name="listing[image]" type="file" class="form-control" />
       </div>
 
       <div class="row">
@@ -82,5 +85,3 @@
     </form>
   </div>
 </div>
-
-<script src="/js/script.js"></script>

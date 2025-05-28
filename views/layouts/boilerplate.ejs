@@ -22,11 +22,19 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
       rel="stylesheet"
     />
+    <link href="/css/rating.css" rel="stylesheet" />
+    <!-- MapLibre CSS -->
+    <link
+      href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <%- include("../includes/navbar.ejs") %>
 
-    <div class="container pt-5"><%- body %></div>
+    <div class="container">
+      <%- include("../includes/flash.ejs") %> <%- body %>
+    </div>
 
     <%- include("../includes/footer.ejs") %>
     <script

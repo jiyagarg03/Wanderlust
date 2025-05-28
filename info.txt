@@ -17,6 +17,22 @@ b) added it in add.js
 a)data.js = sample data(export it thru function)
 b) index.js = to run data.js
 
+4 new route
+ app.get("/testListing", async (req, res) => {
+     let sampleListing = new Listing({
+         title: "My New Home",
+         description: "By the beach",
+         price: 1200,
+         location: "Calangute, Goa",
+         country: "India",
+     });
+
+//save in db
+     await sampleListing.save();
+     console.log("Sample was saved");
+     res.send("Successful Testing");
+ });
+
 now making index route: accept GET requests: /listings = all listings
 then we did show route, made show.ejs
 then add ruppes in price, and for comma
@@ -39,8 +55,220 @@ EJS mate
 made boilerplate and styls.css
 we did all the styling basically, and made script.js
 
-Phase 1c - middlewares, error handling, form validation
+Phase 1c - middlewares, error handling, 
+form validation
 
 error(try n catch)
 wrapAsync
 custom ExpressError
+
+validation schema: by joi(so we dont hv to write write error for every schema component)
+- We will define scheme in joi which is not mongoDB side schema, it's server side schema
+made schema.js
+- now after making it we'll convert it to a function(middleware)
+- Now, learn MongoDB(am skipping rn)
+
+
+
+Phase 2 a
+
+handling deletion(using Mongoose Middleware)
+We can use 2 middlewares :
+• Pre - run before the query is executed
+• Post - run after the query is executed
+
+findByIdAndDelete => findOneAndDelete(by default)
+
+New Model: Reviews
+• comment
+• rating
+• createdAt
+
+review.js
+1) setting up reviews
+2) submitting the form
+many to one relationship with reviews and listings
+
+client side validation: thru bootstrap
+server side: joi schema -> schema validation -> middleware
+
+render review(show under listings)
+
+delete reviews
+$pull operator of mongoose: The $pull operator removes from an existing array all instances of a value or values that match a
+specified condition.
+
+
+Phase 2 b
+
+1) Express Router: Express Routers are a way to organize your Express application such that our primary app.js file does not become bloated.
+const router = express.Router() : creates new router object
+
+Reconstructing reviews:
+app.use("/listings/: id/reviews", reviews);
+router = express.Router({ mergeParams: true });
+we used merge to merge parent param with child
+
+- cookies
+Web Cookies
+HTTP cookies are small blocks of data created by a web server while a user is browsing a website and placed on the user's computer or other device by the user's web browser.
+
+npm i cookie-parser : we can't access cookies directly without this package
+
+- Signed Cookies: Purpose = to know whether someone has tampered with values or not
+1)Send Signed Cookie
+
+app.use (cookieParser ("secretcode") );
+
+app. get ("/getsignedcookie", (req, res) => {
+    res. cookie("color", "red", { signed: true });
+    res.send("done");
+});
+
+2)Verify Signed cookie
+
+app-get ("/verify", (req, res) => {
+    res.send(req.signedCookies);
+})；
+
+
+Phase 2 c
+
+Express Sessions:
+
+- Stateful Protocol
+Stateful Protocol require server to save the status and session information.
+eg - ftp
+
+- Stateless Protocol
+Stateless Protocol does not require the server to retain the server information. 
+eg - http
+
+connect-flash
+The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user.
+
+- res.local
+app.use((req, res, next) => {
+    res. locals.messages = req. flash ("success");
+    next () ;
+}) ;
+
+Note: 
+1) httpOnly is to prevent sttp attacks
+2) app.use(flash()) before routes
+
+
+Phase 2 d
+
+-Authentication:
+Authentication is the process of verifying who someone is
+
+Storing Passwords
+We NEVER store the passwords as it is. We store their hashed form.
+
+password-
+"helloworld"
+
+1)Salting:
+Password salting is a technique to protect passwords stored in databases by adding a string of 32 or more characters and then hashing them. 
+
+2)Hashing Function: Ex= SHA256, MD5, CRC
+For every input, there is a fixed output
+They are one-way functions, we can't get input from output
+For a different input, there is a different output but of same length
+Small changes in input should bring large changes in output
+
+Liberary: Passport= Passport is express-compatible authentication middleware for Node.js
+npm i passport
+npm i passport-local
+npm i passport-local-mongoose
+
+how it is stored-
+"936a185caaa266bb9cbe981e9e05cb78cd732b0b3280
+eb944412bb6f8f8f07af"
+
+Doing authentication by local strategy:
+
+1) User model
+user: username, password, email
+You're free to define your User how you like. Passport-Local Mongoose will add a username, hash and salt field to store the username, the hashed password and the salt value.
+Additionally, Passport-Local Mongoose adds some methods to your Schema. See the API
+ 
+2) Configuring strategy
+passport.initialize():
+A middleware that initializes passport.
+
+passport.session():
+A web application needs the ability to identify users as they browse from page to page. This series of requests and responses, each associated with the same user, is known as a session.
+
+passport.use(new LocalStrategy User.authenticate() ))
+
+Note: we are using pbkdf2 hashing algorithm
+
+3) Signup User:
+GET /signup
+POST /signup
+
+
+Phase 2 e
+
+
+-Authorization:
+Authorization is the process of verifying what specific applications, files, and data a user has access to
+
+Start by hiding edit and delete options from other than owners, make it exclusive
+
+---basic component of all projects is done
+
+Phase 3 a 
+
+MVC: Model, View, Controller
+Implement design pattern for listings
+
+Routers.route()
+
+Rating: https://github.com/LunarLogic/starability/blob/master/starability-css/starability-slot.css
+
+Image Upload:
+1) Our form is not sending files
+2) MongoDB is in BSON: which have size limit to everything
+(we don't prefer storing stroing image or file on mongoDB)
+    |
+    | so we will:
+    |
+1) Make form capable of sending files
+2) Mongo X instead we will save files on 3rd party service(cloud services)  --> then we will get URL/link
+3) Serve this link in mongo
+
+Manipulating Form:
+enctype="multipart/form-data"
+
+Package: Multer (1 done)
+
+Cloud Setup: Cloudinary & .env file
+.env file: is to stre the credentials we dont wanna share with anyone: KEY = value, stored in pairs
+
+Mutler Store CLoudinary
+To use multer and cloudinary together: npm i cloudinary and multer-storage-cloudinary
+
+-cloudConfig.js file is to write code to access our cloud account
+
+WorkFLow: form(file) -> backend(parse) -> cloud(store) -> URL/Link(file)
+Now, save link in Mongo
+
+
+Phase 3 b 
+
+Image preview, then quality drop
+
+Location(Maps):
+Geocoding
+Geocoding is the process of converting addresses (like a street address) into geographic coordinates (like latitude and longitude), which you can use to place markers on a map, or position the map.
+
+Kinda: Location -> API -> coordinates
+
+
+Phase 3 d
+
+Deploy: Mongo Atlas = Cloud database service
+Deploy a multi-cloud database

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const Review = require("./review.js");
 
 //model defined
 //sub schema for image
@@ -11,22 +12,54 @@ const listingSchema = new Schema({
   },
   description: String,
   image: {
-    type: String,
-    default:
-      "https://images.unsplash.com/photo-1709884735626-63e92727d8b6?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    set: (v) => {
-      // Handles undefined, null, or empty string
-      if (!v || v.trim() === "") {
-        return "https://images.unsplash.com/photo-1709884735626-63e92727d8b6?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-      }
-      return v;
-    },
+    url: String,
+    filename: String,
   },
   price: Number,
   location: String,
   country: String,
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Review",
+    },
+  ],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  geometry: {
+    type: {
+      type: String, // e.g., 'Point'
+      enum: ["Point"],
+      required: false,
+    },
+    coordinates: {
+      type: [Number], // [lng, lat]
+      required: false,
+    },
+  },
+  category: {
+    type: String,
+    enum: [
+      "mountains",
+      "arctic",
+      "farms",
+      "deserts",
+      "pools",
+      "beach",
+      "castles",
+      "compact house",
+    ],
+  },
 });
 
+//mongo middleware
+listingSchema.post("findOneAndDelete", async (listing) => {
+  if (listing) {
+    await Review.deleteMany({ _id: { $in: listing.reviews } });
+  }
+});
 //model created
 const Listing = mongoose.model("Listing", listingSchema);
 //model export to app.js
