@@ -20,6 +20,7 @@ Wanderlust allows users to browse and post campground listings, including images
 - Node.js
 - Express.js
 - MongoDB & Mongoose
+- Joi validation
 - EJS templating
 - Passport.js for auth
 - Cloudinary for image hosting
