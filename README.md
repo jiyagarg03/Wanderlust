@@ -1,4 +1,4 @@
-# Wanderlust
+# HavenStay
 
 A travel listing web application where users can discover, create, and manage campgrounds around the world. Built using Node.js, Express, MongoDB, and EJS templating with full CRUD functionality, image uploads, and user authentication.
 
