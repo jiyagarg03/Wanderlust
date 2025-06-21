@@ -4,7 +4,12 @@ const fetch = (...args) =>
 
 module.exports.index = async (req, res) => {
   const allListings = await Listing.find({});
-  res.render("listings/index", { allListings });
+  const notFound = allListings.length === 0;
+
+  res.render("listings/index", {
+    allListings,
+    notFound,
+  });
 };
 
 module.exports.renderNewForm = (req, res) => {
