@@ -4,7 +4,7 @@ A travel listing web application where users can discover, create, and manage ca
 
 ## Description
 
-Wanderlust allows users to browse and post campground listings, including images and location details. Users can register, log in, and manage their own listings. The app features server-side rendering with EJS, RESTful routing, form validation, flash messages, and Cloudinary integration for image storage.
+HavenStay allows users to browse and post campground listings, including images and location details. Users can register, log in, and manage their own listings. The app features server-side rendering with EJS, RESTful routing, form validation, flash messages, and Cloudinary integration for image storage.
 
 ## Features
 
@@ -29,7 +29,8 @@ Wanderlust allows users to browse and post campground listings, including images
 
 ## How to Run Locally
 
-1. Clone the repo:
+Clone the repo:
 ```bash
-git clone https://github.com/jiyagarg03/Wanderlust.git
-cd Wanderlust
+git clone https://github.com/jiyagarg03/havenstay.git
+cd havenstay
+```
